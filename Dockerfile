@@ -25,9 +25,9 @@ RUN mkdir -p "$LIFERAY_HOME" \
       && curl -fSL "$LIFERAY_TOMCAT_URL" -o /tmp/liferay-ee-portal-tomcat.zip \
       && curl -fSL "$LIFERAY_TOMCAT_LIC" -o /tmp/activation-key-ee-7.1-trial.xml \
       && unzip /tmp/liferay-ee-portal-tomcat.zip -d /tmp/liferay \
-      && mv /tmp/liferay/liferay-dxp-7.1.10-ga1/* $LIFERAY_HOME/ \
-      && mkdir $LIFERAY_HOME/deploy \
-      && mv /tmp/activation-key-ee-7.1-trial.xml $LIFERAY_HOME/activation-key-ee-7.1-trial.xml \
+      && mv /tmp/liferay/liferay-dxp-7.1.10-ga1/* $LIFERAY_HOME/
+RUN  mkdir $LIFERAY_HOME/deploy \
+      && mv /tmp/activation-key-ee-7.1-trial.xml $LIFERAY_HOME/deploy/activation-key-ee-7.1-trial.xml \
       && rm /tmp/liferay-ee-portal-tomcat.zip \
       && rm -fr /tmp/liferay/liferay-ee-portal-7.1.0-ga1 \
       && chown -R liferay:liferay $LIFERAY_HOME \
@@ -40,8 +40,12 @@ RUN mkdir -p "$LIFERAY_HOME" \
       && chmod +x /usr/local/bin/gosu \
       && gosu nobody true
 
-COPY ./configs/setenv.sh $CATALINA_HOME/bin/setenv.sh
+# COPY ./configs/* $CATALINA_HOME/bin/setenv.sh
+RUN mkdir $LIFERAY_CONFIG_DIR
+COPY ./configs/* $LIFERAY_CONFIG_DIR/
+# COPY ./config/portal-ext.properties $LIFERAY_CONFIG_DIR/
 COPY ./entrypoint.sh /usr/local/bin
+
 RUN chmod +x /usr/local/bin/entrypoint.sh
 RUN chmod +x $CATALINA_HOME/bin/catalina.sh
 

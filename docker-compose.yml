@@ -5,10 +5,12 @@ services:
     depends_on:
      - postgres
     ports:
-     - "8080:8080"
+     - "8888:8080"
      - "11311:11311"
   postgres:
     image: postgres
+    ports:
+     - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=my-secret-pw
       - POSTGRES_USER=liferay
